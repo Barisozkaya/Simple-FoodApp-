@@ -59,6 +59,7 @@ class MealActivity : AppCompatActivity() {
                 binding .tvInstructionsStep.text=meal.strInstructions
 
                 youtubeLink = meal.strYoutube
+
             }
 
         })
