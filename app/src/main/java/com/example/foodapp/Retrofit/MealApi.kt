@@ -9,6 +9,6 @@ interface MealApi {
     @GET("random.php")
     fun getRandomMeal():Call<MealList>
 
-     @GET("lookup.php")
-     fun getMealDetails(@Query("1")id:String): Call<MealList>
+     @GET("lookup.php?")
+     fun getMealDetails(@Query("i")id:String): Call<MealList>
 }
