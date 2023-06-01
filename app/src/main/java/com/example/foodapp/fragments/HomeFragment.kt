@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.example.foodapp.Data.Category
 import com.example.foodapp.Data.MealsByCategory
 import com.example.foodapp.Data.Meal
+import com.example.foodapp.activites.CategoryMealsActivity
 import com.example.foodapp.activites.MealActivity
 import com.example.foodapp.adapters.CategoriesAdapter
 import com.example.foodapp.adapters.MostPopularAdapter
@@ -34,6 +35,7 @@ class HomeFragment : Fragment() {
         const val MEAL_ID = "com.example.foodapp.fragments.idMeal"
         const val MEAL_NAME = "com.example.foodapp.fragments.nameMeal"
         const val MEAL_THUMB = "com.example.foodapp.fragments.thumbMeal"
+        const val CATEGORY_NAME = "package com.example.foodapp.fragments.categoryName"
 
     }
 
@@ -66,6 +68,16 @@ class HomeFragment : Fragment() {
         prepareCategoriesRecyclerView()
         homeMvvm.getCategories()
         observeCategoriesLiveData()
+        onCategoryClick()
+    }
+
+    private fun onCategoryClick() {
+        categoriesAdapter.onItemClick = { category->
+            val intent = Intent(activity,CategoryMealsActivity::class.java)
+            intent.putExtra(CATEGORY_NAME,category.strCategory)
+            startActivity(intent)
+
+        }
     }
 
     private fun prepareCategoriesRecyclerView() {
