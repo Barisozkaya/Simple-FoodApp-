@@ -1,43 +1,58 @@
 package com.example.foodapp.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.foodapp.R
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.example.foodapp.activites.MainActivity
+import com.example.foodapp.adapters.FavoritesMealsAdapter
+import com.example.foodapp.databinding.FragmentFavoritesBinding
+import com.example.foodapp.videoModel.HomeViewModel
 
 class FavoritesFragment : Fragment() {
-    private var param1: String? = null
-    private var param2: String? = null
-
+    private lateinit var binding: FragmentFavoritesBinding
+    private lateinit var viewModel:HomeViewModel
+    private lateinit var favoritesAdapter: FavoritesMealsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
+        viewModel = (activity as MainActivity).viewModel
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorites, container, false)
+    ): View {
+       binding = FragmentFavoritesBinding.inflate(inflater)
+      return binding.root
+    }
+    override fun onViewCreated (view: View,savedInstanceState: Bundle?){
+        super.onViewCreated(view, savedInstanceState)
+        prepareRecyclerView()
+        observeFavroites()
+
+
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FavoritesFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun prepareRecyclerView() {
+        favoritesAdapter = FavoritesMealsAdapter()
+        binding.rvFavorites.apply {
+            layoutManager = GridLayoutManager(context,2,GridLayoutManager.VERTICAL, false)
+            adapter = favoritesAdapter
+        }
     }
+
+    private fun observeFavroites(){
+        viewModel.observeFavoritesMealsLiveData().observe(requireActivity(), Observer {meals->
+              favoritesAdapter.differ.submitList(meals)
+        })
+
+    }
+
 }

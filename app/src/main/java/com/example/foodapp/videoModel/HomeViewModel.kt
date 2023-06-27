@@ -12,14 +12,18 @@ import com.example.foodapp.Data.MealsByCategory
 import com.example.foodapp.Data.Meal
 import com.example.foodapp.Data.MealList
 import com.example.foodapp.Retrofit.RetrofitInstance
+import com.example.foodapp.db.MealDatabase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeViewModel() : ViewModel() {
+class HomeViewModel(
+    private val mealDatabase: MealDatabase
+) : ViewModel() {
     private var randomMealLiveData = MutableLiveData<Meal>()
     private var popularItemsLiveData = MutableLiveData<List<MealsByCategory>>()
     private var categoriesLiveData = MutableLiveData<List<Category>>()
+    private var favoritesMealsLiveData = mealDatabase.mealDao().getAllMeals()
 
 
     fun getRandomMeal() {
@@ -80,6 +84,10 @@ class HomeViewModel() : ViewModel() {
 
     fun observeCategoriesLiveData():LiveData<List<Category>>{
         return categoriesLiveData
+    }
+
+    fun observeFavoritesMealsLiveData():LiveData<List<Meal>>{
+        return favoritesMealsLiveData
     }
 
 }
